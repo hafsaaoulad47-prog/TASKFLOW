@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Projects - TaskFlow</title>
+
+  
+  <link rel="stylesheet" href="styles.css" />
+  <script src="app.js"></script>
+</head>
+
+<body>
+
+  <!-- PAGE HEADER -->
+  <div class="main-content">
+
+    <div class="page-header">
+      <h2>Mes Projets</h2>
+      <button class="btn-primary">+ Nouveau projet</button>
+    </div>
+
+    <!-- PROJECTS GRID -->
+    <div id="projects-list" class="projects-grid">
+
+      <!-- مثال بطاقة مشروع -->
+      <div class="project-card">
+        <h3>Projet Exemple</h3>
+        <p>Description du projet...</p>
+
+        <div class="project-card-footer">
+          <span class="badge-status badge-actif">actif</span>
+
+          <div class="card-actions">
+            <button class="btn-sm">Modifier</button>
+            <button class="btn-danger">Supprimer</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- PAGINATION -->
+    <div id="projects-pagination" class="pagination"></div>
+
+  </div>
+
+</body>
+</html>
