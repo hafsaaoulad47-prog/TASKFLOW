@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>TaskFlow Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <aside class="sidebar">
+    <h2>TaskFlow</h2>
+    <nav>
+      <a href="dashboard.html" class="active">Dashboard</a>
+      <a>Projects</a>
+      <a href="tasks.html">Recherche</a>
+      <a>Notifications</a>
+      <a>Settings</a>
+    </nav>
+  </aside>
+
+  <main class="main">
+    <h1>Dashboard</h1>
+    <p class="subtitle">Vue générale de votre activité</p>
+
+    <section class="cards">
+      <div class="card">
+        <span>📁</span>
+        <h3>Projets actifs</h3>
+        <p id="activeProjects">0</p>
+      </div>
+
+      <div class="card">
+        <span>✅</span>
+        <h3>Tâches assignées</h3>
+        <p id="assignedTasks">0</p>
+      </div>
+
+      <div class="card">
+        <span>✔️</span>
+        <h3>Tâches terminées</h3>
+        <p id="completedTasks">0</p>
+      </div>
+
+      <div class="card">
+        <span>⏰</span>
+        <h3>Tâches en retard</h3>
+        <p id="lateTasks">0</p>
+      </div>
+    </section>
+  </main>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="dashboard.js"></script>
+</body>
+</html>
