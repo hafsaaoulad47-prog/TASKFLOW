@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>TaskFlow - Recherche</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <aside class="sidebar">
+    <h2>TaskFlow</h2>
+    <nav>
+      <a href="dashboard.html">Dashboard</a>
+      <a>Projects</a>
+      <a class="active" href="tasks.html">Recherche</a>
+      <a>Notifications</a>
+      <a>Settings</a>
+    </nav>
+  </aside>
+
+  <main class="main">
+    <h1>Recherche des tâches</h1>
+    <p class="subtitle">Filtrage, recherche et pagination</p>
+
+    <section class="filters">
+      <input id="searchInput" placeholder="Rechercher une tâche...">
+
+      <select id="statusFilter">
+        <option value="">Tous les statuts</option>
+        <option value="a_faire">À faire</option>
+        <option value="en_cours">En cours</option>
+        <option value="termine">Terminé</option>
+      </select>
+
+      <select id="priorityFilter">
+        <option value="">Toutes les priorités</option>
+        <option value="basse">Basse</option>
+        <option value="moyenne">Moyenne</option>
+        <option value="haute">Haute</option>
+      </select>
+
+      <button id="filterBtn">Filtrer</button>
+    </section>
+
+    <section id="tasksList"></section>
+
+    <div class="pagination">
+      <button id="prevBtn">Précédent</button>
+      <span id="pageInfo">Page 1</span>
+      <button id="nextBtn">Suivant</button>
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="tasks.js"></script>
+</body>
+</html>
