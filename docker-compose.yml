@@ -1,6 +1,0 @@
-services:
-  mongodb:
-    image: mongo
-    container_name: taskflow-mongo
-    ports:
-      - "27017:27017"
