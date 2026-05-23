@@ -10,13 +10,13 @@ router.get("/", auth, async (req, res) => {
   const now = new Date();
 
   try {
-    // Nombre de projets actifs
+    // Active projects count
     const activeProjects = await Project.countDocuments({
       $or: [{ owner: userId }, { members: userId }],
       status: "actif",
     });
 
-    // Agrégation des statistiques des tâches
+    // Aggregation for task stats
     const taskStats = await Task.aggregate([
       { $match: { assignedTo: userId } },
       {
@@ -45,7 +45,7 @@ router.get("/", auth, async (req, res) => {
 
     const stats = taskStats[0] || { total: 0, done: 0, late: 0 };
 
-    // Tâches en cours triées par priorité décroissante puis deadline croissante
+    // In-progress tasks sorted by priority desc, deadline asc
     const priorityOrder = { haute: 0, moyenne: 1, basse: 2 };
     const inProgressTasks = await Task.find({
       assignedTo: userId,
