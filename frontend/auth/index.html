@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TaskFlow</title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/styles.css" />
+
+  <!-- AXIOS -->
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+
+<body>
+
+  <!-- AUTH SECTION -->
+  <section id="auth-section">
+
+    <div class="auth-card">
+
+      <h1 class="logo">TaskFlow</h1>
+      <p class="tagline">Gestion collaborative des projets</p>
+
+      <!-- TABS -->
+      <div class="tabs">
+        <button class="tab active" onclick="showTab('login')">
+          Login
+        </button>
+
+        <button class="tab" onclick="showTab('register')">
+          Register
+        </button>
+      </div>
+
+      <!-- LOGIN -->
+      <div id="login-form">
+
+        <input
+          type="email"
+          id="login-email"
+          placeholder="Email"
+        />
+
+        <input
+          type="password"
+          id="login-password"
+          placeholder="Password"
+        />
+
+        <button
+          class="btn-primary"
+          onclick="login()"
+        >
+          Se connecter
+        </button>
+
+      </div>
+
+      <!-- REGISTER -->
+      <div id="register-form" style="display:none;">
+
+        <input
+          type="text"
+          id="reg-name"
+          placeholder="Nom complet"
+        />
+
+        <input
+          type="email"
+          id="reg-email"
+          placeholder="Email"
+        />
+
+        <input
+          type="password"
+          id="reg-password"
+          placeholder="Password"
+        />
+
+        <button
+          class="btn-primary"
+          onclick="register()"
+        >
+          Créer un compte
+        </button>
+
+      </div>
+
+      <!-- ERROR -->
+      <p id="auth-error" class="error-msg"></p>
+
+    </div>
+  </section>
+
+  <!-- APP SECTION -->
+  <section id="app-section" style="display:none;">
+
+    <div class="navbar">
+
+      <div class="logo-small">
+        TaskFlow
+      </div>
+
+      <div class="nav-right">
+
+        <span id="user-name"></span>
+
+        <button
+          class="btn-logout"
+          onclick="logout()"
+        >
+          Logout
+        </button>
+
+      </div>
+    </div>
+
+    <div class="main-content">
+
+      <div class="page-header">
+        <h2>Mes Projets</h2>
+
+        <button
+          class="btn-primary"
+          onclick="openProjectModal()"
+        >
+          Nouveau Projet
+        </button>
+      </div>
+
+      <!-- PROJECTS -->
+      <div
+        id="projects-list"
+        class="projects-grid"
+      >
+      </div>
+
+    </div>
+  </section>
+
+  <!-- PROJECT MODAL -->
+  <div
+    id="project-modal"
+    class="modal"
+    style="display:none;"
+  >
+
+    <div class="modal-content">
+
+      <h3>Nouveau Projet</h3>
+
+      <input
+        type="hidden"
+        id="project-id"
+      />
+
+      <input
+        type="text"
+        id="project-title"
+        placeholder="Titre du projet"
+      />
+
+      <textarea
+        id="project-desc"
+        placeholder="Description"
+      ></textarea>
+
+      <div class="modal-actions">
+
+        <button
+          class="btn-primary"
+          onclick="saveProject()"
+        >
+          Enregistrer
+        </button>
+
+        <button
+          class="btn-secondary"
+          onclick="closeModal('project-modal')"
+        >
+          Annuler
+        </button>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- JS -->
+  <script src="app.js"></script>
+
+</body>
+</html> 
