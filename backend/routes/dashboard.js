@@ -1,69 +1,75 @@
 const express = require("express");
 const router = express.Router();
-
-const mongoose = require("mongoose");
-const Project = require("../models/Project");
+const auth = require("../middleware/auth");
 const Task = require("../models/Task");
+const Project = require("../models/Project");
 
-router.get("/dashboard", async (req, res) => {
+// GET /api/dashboard
+router.get("/", auth, async (req, res) => {
+  const userId = req.user._id;
+  const now = new Date();
+
   try {
-    const userId = new mongoose.Types.ObjectId("000000000000000000000001");
-    const now = new Date();
+    // Nombre de projets actifs
+    const activeProjects = await Project.countDocuments({
+      $or: [{ owner: userId }, { members: userId }],
+      status: "actif",
+    });
 
-    const activeProjectsResult = await Project.aggregate([
-      {
-        $match: {
-          owner: userId,
-          status: "actif"
-        }
-      },
-      {
-        $count: "total"
-      }
-    ]);
-
-    const taskStatsResult = await Task.aggregate([
-      {
-        $match: {
-          assignedTo: userId
-        }
-      },
+    // Agrégation des statistiques des tâches
+    const taskStats = await Task.aggregate([
+      { $match: { assignedTo: userId } },
       {
         $group: {
           _id: null,
-          assignedTasks: { $sum: 1 },
-          completedTasks: {
-            $sum: {
-              $cond: [{ $eq: ["$status", "termine"] }, 1, 0]
-            }
-          },
-          lateTasks: {
+          total: { $sum: 1 },
+          done: { $sum: { $cond: [{ $eq: ["$status", "terminé"] }, 1, 0] } },
+          late: {
             $sum: {
               $cond: [
                 {
                   $and: [
-                    { $lt: ["$dueDate", now] },
-                    { $ne: ["$status", "termine"] }
-                  ]
+                    { $ne: ["$status", "terminé"] },
+                    { $lt: ["$deadline", now] },
+                    { $ne: ["$deadline", null] },
+                  ],
                 },
                 1,
-                0
-              ]
-            }
-          }
-        }
-      }
+                0,
+              ],
+            },
+          },
+        },
+      },
     ]);
 
-    res.json({
-      activeProjects: activeProjectsResult[0]?.total || 0,
-      assignedTasks: taskStatsResult[0]?.assignedTasks || 0,
-      completedTasks: taskStatsResult[0]?.completedTasks || 0,
-      lateTasks: taskStatsResult[0]?.lateTasks || 0
+    const stats = taskStats[0] || { total: 0, done: 0, late: 0 };
+
+    // Tâches en cours triées par priorité décroissante puis deadline croissante
+    const priorityOrder = { haute: 0, moyenne: 1, basse: 2 };
+    const inProgressTasks = await Task.find({
+      assignedTo: userId,
+      status: { $ne: "terminé" },
+    })
+      .populate("project", "title")
+      .sort({ deadline: 1 });
+
+    inProgressTasks.sort((a, b) => {
+      const pa = priorityOrder[a.priority] ?? 1;
+      const pb = priorityOrder[b.priority] ?? 1;
+      if (pa !== pb) return pa - pb;
+      return (a.deadline || Infinity) - (b.deadline || Infinity);
     });
 
-  } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.json({
+      activeProjects,
+      assignedTasks: stats.total,
+      doneTasks: stats.done,
+      lateTasks: stats.late,
+      inProgressTasks,
+    });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
 });
 
