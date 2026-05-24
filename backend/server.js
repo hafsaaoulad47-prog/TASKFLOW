@@ -1,22 +1,44 @@
+require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-require("dotenv").config();
-const dashboardRoutes = require("./routes/dashboard");
-const taskRoutes = require("./routes/tasks");
+
 const app = express();
+
+// ─────────────────────────────────────────────
+// Middlewares globaux
+// ─────────────────────────────────────────────
 app.use(cors());
 app.use(express.json());
-app.get("/", (req, res) => {
-  res.send("Server is running 🚀");
+
+// ─────────────────────────────────────────────
+// Route de test
+// ─────────────────────────────────────────────
+app.get("/api/test", (req, res) => {
+  res.json({ message: "API is working!" });
 });
-// MongoDB connection
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log("MongoDB connected"))
-  .catch(err => console.log(err));
-const PORT = process.env.PORT || 5000;
-app.use("/api", dashboardRoutes);
-app.use("/api", taskRoutes);
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+
+// ─────────────────────────────────────────────
+// Routes
+// ─────────────────────────────────────────────
+app.use("/api/auth", require("./routes/auth"));
+app.use("/api/projects", require("./routes/projects"));
+app.use("/api/tasks", require("./routes/tasks"));
+app.use("/api/dashboard", require("./routes/dashboard"));
+app.use("/api/notifications", require("./routes/notifications"));
+
+// ─────────────────────────────────────────────
+// Connexion MongoDB
+// ─────────────────────────────────────────────
+mongoose
+  .connect(process.env.MONGO_URI)
+  .then(() => {
+    console.log("✅ MongoDB connecté");
+    app.listen(process.env.PORT || 5000, "0.0.0.0", () =>
+      console.log(`🚀 Serveur démarré sur le port ${process.env.PORT || 5000}`)
+    );
+  })
+  .catch((err) => {
+    console.error("❌ Erreur de connexion MongoDB:", err.message);
+    process.exit(1);
+  });
